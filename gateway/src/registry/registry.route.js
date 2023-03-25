@@ -39,6 +39,7 @@ const getRedirectURL = () => {
 }
 
 const getAllServiceURLs = () => {
+    createFile();
     const registry = fs.readFileSync(path, 'utf-8');
     const services = JSON.parse(registry);
     return services;
@@ -66,6 +67,12 @@ const heathCheckPassed = (url) => {
 
     const allServices = JSON.stringify(services);
     fs.writeFileSync(path, allServices, 'utf-8');
+}
+
+const createFile = () => {
+    if(!fs.existsSync(path)) {
+        fs.writeFileSync(path, JSON.stringify([]));
+    }
 }
 
 module.exports = { registryRouter, getAllServiceURLs, getRedirectURL, heathCheckFailed, heathCheckPassed };

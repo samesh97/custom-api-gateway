@@ -7,7 +7,7 @@ const gatewayURL = 'http://localhost:5000/register/';
 const serviceURL = `http://localhost:${PORT}`;
 
 app.use(express.json());
-app.use('/health/', heathCheckRoute);
+app.use('/health', heathCheckRoute);
 
 app.use('/hello', (req, res) => {
     res.json(`hello from service ${serviceURL}`);
