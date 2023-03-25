@@ -16,8 +16,7 @@ registryRouter.post('/', (req, res) => {
 });
 
 const registerService = (url) => {
-    const registry = fs.readFileSync(path, 'utf-8');
-    const services = JSON.parse(registry);
+    const services = getAllServiceURLs();
     if(!services.find(object => object.url == url))
     {
         const heath = new Heath();
@@ -32,8 +31,7 @@ const registerService = (url) => {
 }
 
 const getRedirectURL = () => {
-    const registry = fs.readFileSync(path, 'utf-8');
-    let services = JSON.parse(registry);
+    let services = getAllServiceURLs();
     //need to optimize the routing mechanism without using a random index
     services = services.filter( object => object.lastCheckPassed );
     const randomIndex = Math.floor(Math.random() * services.length);
@@ -46,8 +44,7 @@ const getAllServiceURLs = () => {
     return services;
 }
 const heathCheckFailed = (url) => {
-    const registry = fs.readFileSync(path, 'utf-8');
-    let services = JSON.parse(registry);
+    let services = getAllServiceURLs();
 
     const service = services.find(object => object.url == url );
     service.failedCount -= 1;
@@ -61,8 +58,7 @@ const heathCheckFailed = (url) => {
 }
 
 const heathCheckPassed = (url) => {
-    const registry = fs.readFileSync(path, 'utf-8');
-    let services = JSON.parse(registry);
+    let services = getAllServiceURLs();
 
     const service = services.find(object => object.url == url );
     service.lastCheckPassed = true;
