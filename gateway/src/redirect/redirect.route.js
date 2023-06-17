@@ -2,7 +2,6 @@ const express = require('express');
 const redirectRoute = express.Router();
 const axios = require('axios');
 const { getRedirectURL, heathCheckFailed } = require('../registry/registry.route');
-const e = require('express');
 
 redirectRoute.all('/:any', async (req, res, next) => {
     const resoucePath = req.url;
@@ -22,17 +21,15 @@ redirectRoute.all('/:any', async (req, res, next) => {
         console.log(`Request failed with ${redirectURl}, retrying..`);
         heathCheckFailed(redirectURl);
     }
-    console.log("Came to last")
     next();
-    
 });
 
-sendRequest = async (redirectURl, resoucePath, httpMethod, requestBody) => {
-    if(!redirectURl)
+sendRequest = async (baseUrl, resoucePath, httpMethod, requestBody) => {
+    if(!baseUrl)
     {
         return "Service unavailable";
     }
-    const fullUrl =  redirectURl + resoucePath;
+    const fullUrl =  baseUrl + resoucePath;
     try
     {
         let result = await axios({
@@ -44,6 +41,10 @@ sendRequest = async (redirectURl, resoucePath, httpMethod, requestBody) => {
     }
     catch(e)
     {
+        if(e.response.status == 404)
+        {
+            return "Not found";
+        }
         return undefined;
     }
 }

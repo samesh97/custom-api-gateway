@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/health', heathCheckRoute);
 
 app.use('/hello', (req, res) => {
-    res.json(`hello from service ${serviceURL}`);
+    res.json(`Hello from service ${serviceURL}`);
 });
 
 app.listen(PORT, () => {

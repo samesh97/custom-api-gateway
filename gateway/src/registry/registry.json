@@ -1,1 +1,1 @@
-[{"url":"http://localhost:5002","failedCount":6,"lastCheckPassed":false},{"url":"http://localhost:5001","failedCount":10,"lastCheckPassed":true}]
+[{"url":"http://localhost:5001","failedCount":10,"lastCheckPassed":true},{"url":"http://localhost:5002","failedCount":10,"lastCheckPassed":true},{"url":"http://localhost:5003","failedCount":10,"lastCheckPassed":true}]
