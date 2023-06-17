@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "nodemon src/server.js",
+    "debug": "node --inspect src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,11 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.21"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "/src/registry/registry.json",
+      "/error.json"
+    ]
   }
 }

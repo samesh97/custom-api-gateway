@@ -1,32 +1,51 @@
 const express = require('express');
 const redirectRoute = express.Router();
 const axios = require('axios');
-const { getRedirectURL } = require('../registry/registry.route');
+const { getRedirectURL, heathCheckFailed } = require('../registry/registry.route');
+const e = require('express');
 
-redirectRoute.all('/:any', async (req, res) => {
+redirectRoute.all('/:any', async (req, res, next) => {
     const resoucePath = req.url;
     const httpMethod = req.method;
     const requestBody = req.body;
     const requestHeaders = req.headers;
-    const redirectURL = getRedirectURL() + resoucePath;
+    const maxRetries = 3;
+   
+    for(let i = 0; i < maxRetries; i++)
+    {
+        let redirectURl = getRedirectURL();
+        const response = await sendRequest(redirectURl, resoucePath, httpMethod, requestBody);
+        if(response)
+        {
+            return res.json(response);
+        }
+        console.log(`Request failed with ${redirectURl}, retrying..`);
+        heathCheckFailed(redirectURl);
+    }
+    console.log("Came to last")
+    next();
+    
+});
 
+sendRequest = async (redirectURl, resoucePath, httpMethod, requestBody) => {
+    if(!redirectURl)
+    {
+        return "Service unavailable";
+    }
+    const fullUrl =  redirectURl + resoucePath;
     try
     {
-        await axios({
-            url: redirectURL,
+        let result = await axios({
+            url: fullUrl,
             method: httpMethod,
-            data: requestBody,
-            headers: requestHeaders
-        })
-        .then(response => {
-            return res.json(response.data);
-        })
-        .catch(error => {
-            return res.status(404);
+            data: requestBody
         });
+        return result.data;
     }
-    catch( error ) { return res.status(404); }
-    return res.status(404);
-});
+    catch(e)
+    {
+        return undefined;
+    }
+}
 
 module.exports = { redirectRoute };

@@ -33,7 +33,7 @@ const registerService = (url) => {
 const getRedirectURL = () => {
     let services = getAllServiceURLs();
     //need to optimize the routing mechanism without using a random index
-    services = services.filter( object => object.lastCheckPassed );
+    services = services.filter( object => object.lastCheckPassed);
     const randomIndex = Math.floor(Math.random() * services.length);
     return services[randomIndex]?.url;
 }
@@ -46,8 +46,10 @@ const getAllServiceURLs = () => {
 }
 const heathCheckFailed = (url) => {
     let services = getAllServiceURLs();
-
     const service = services.find(object => object.url == url );
+    if( !service ) {
+        return;
+    }
     service.failedCount -= 1;
     service.lastCheckPassed = false;
 
@@ -60,8 +62,10 @@ const heathCheckFailed = (url) => {
 
 const heathCheckPassed = (url) => {
     let services = getAllServiceURLs();
-
     const service = services.find(object => object.url == url );
+    if( !service ) {
+        return;
+    }
     service.lastCheckPassed = true;
     service.failedCount = 10;
 
