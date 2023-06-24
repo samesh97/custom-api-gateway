@@ -5,14 +5,17 @@ const heathCheckRoute = Router();
 let lastHeathCheckFromServer;
 const timeoutPeriodInSeconds = 60;
 
-heathCheckRoute.get('/', (req, res) => {
+heathCheckRoute.get('/', (req, res) => 
+{
     lastHeathCheckFromServer = Date.now();
     console.log("Health check passed at " + new Date());
     return res.status(200).json(`Heathcheck success!`);
 });
 
-const register = (gatewayURL, serviceUrl) => {
-    setInterval(() => {
+const register = (gatewayURL, serviceUrl) => 
+{
+    setInterval(() => 
+    {
         let currentTimestamp = Date.now();
         const isTimedOut = !lastHeathCheckFromServer || millisToSeconds(currentTimestamp - lastHeathCheckFromServer) >= timeoutPeriodInSeconds;
         if( isTimedOut )
@@ -32,7 +35,8 @@ const register = (gatewayURL, serviceUrl) => {
     }, 10000);
 }
 
-const millisToSeconds = (millis) => {
+const millisToSeconds = (millis) => 
+{
     return Math.floor(millis / 1000);
 }
 
