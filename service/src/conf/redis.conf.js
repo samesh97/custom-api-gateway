@@ -1,33 +1,43 @@
 const { createClient }  = require("redis");
 
 let isRedisConnected = false;
-const redisClient = createClient();
-console.log("Connecting to redis...");
+let redisClient = undefined;
 
-redisClient.on('ready', () => {
-    isRedisConnected = true;
-    console.log("Connected to redis.");
-});
-redisClient.on('error', (err) => {
-    isRedisConnected = false;
-    console.error('Error while connecting to redis ' + err);
-});
+const connectToRedis = async () => {
+    redisClient = createClient();
+    console.log("Connecting to Redis...");
 
-redisClient.connect();
+    redisClient.on('ready', () => {
+        isRedisConnected = true;
+        console.log("Connected to Redis.");
+    });
+    redisClient.on('error', (err) => {
+        isRedisConnected = false;
+        console.error(`Error while connecting to Redis: ${err}`);
+    });
+
+    redisClient.connect();
+}
 
 const setCache = async (key, value) => {
     if (isRedisConnected)
     {
-        await redisClient.set(key, value);
+        const jsonStringifyObject = JSON.stringify(value);
+        await redisClient.set(key, jsonStringifyObject);
     }
 }
 
 const getCache = async (key) => {
     if( isRedisConnected )
     {
-        return await redisClient.get(key);
+        let result = await redisClient.get(key);
+        if( result )
+        {
+            result = JSON.parse( result );
+        }
+        return result;
     }
-    return undefined;
+    return null;
 }
 
-module.exports = { setCache, getCache };
+module.exports = { setCache, getCache, connectToRedis };

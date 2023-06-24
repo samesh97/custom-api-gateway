@@ -25,16 +25,16 @@ const registerService = (url) => {
         heath.lastCheckPassed = true
 
         services.push( heath );
-        const allServices =JSON.stringify(services);
-        fs.writeFileSync(path,allServices, 'utf-8');
+        const allServices = JSON.stringify(services);
+        fs.writeFileSync(path, allServices, 'utf-8');
     }
 }
 
 const getRedirectURL = () => {
     let services = getAllServiceURLs();
     //need to optimize the routing mechanism without using a random index
-    services = services.filter( object => object.lastCheckPassed);
-    const randomIndex = Math.floor(Math.random() * services.length);
+    services = services.filter( object => object.lastCheckPassed );
+    const randomIndex = Math.floor( Math.random() * services.length );
     return services[randomIndex]?.url;
 }
 
@@ -62,7 +62,7 @@ const heathCheckFailed = (url) => {
 
 const heathCheckPassed = (url) => {
     let services = getAllServiceURLs();
-    const service = services.find(object => object.url == url );
+    const service = services.find( object => object.url == url );
     if( !service ) {
         return;
     }
@@ -74,8 +74,9 @@ const heathCheckPassed = (url) => {
 }
 
 const createFile = () => {
-    if(!fs.existsSync(path)) {
-        fs.writeFileSync(path, JSON.stringify([]));
+    if( !fs.existsSync(path) ) 
+    {
+        fs.writeFileSync(path, JSON.stringify( [] ));
     }
 }
 
